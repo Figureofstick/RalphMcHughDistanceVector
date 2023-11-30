@@ -16,18 +16,33 @@ class Entity0(Entity):
         startvector[n] is 999, then this node and 'n' are not connected"""
         super().__init__(sim)
         self.sim = sim
-
+        
         # create NxN matrix for distance storage
         self.distance_table = []
         for _ in range(len(startvector)):
             self.distance_table.append([999] * len(startvector))
 
-        # your intialization code here
+        # these are the base link costs to get to each nodes from 0
+        self.distance_table[1][1] = 5
+        self.distance_table[2][2] = 3
+        self.distance_table[3][3] = 7
+
 
     def start(self):
         """This function is called once the simulator is fully
         ready handle packets. You can start to send packets in
         this function."""
+        
+        # make packets that have the link info for node0
+        # this is the packet for node1
+        starterPacket = Packet(self, self.sim, 0, 1)
+        self.sim.toLayer2(0, starterPacket)
+        # packet for node2
+        starterPacket = Packet(self, self.sim, 0, 2)
+        self.sim.toLayer2(0, starterPacket)
+        # packet for node3
+        starterPacket = Packet(self, self.sim, 0, 3)
+        self.sim.toLayer2(0, starterPacket)
 
     def update(self, pkt):
         """Handle updates when a packet is received.  Students will need to call

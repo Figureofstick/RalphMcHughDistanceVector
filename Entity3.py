@@ -22,7 +22,8 @@ class Entity3(Entity):
         for _ in range(len(startvector)):
             self.distance_table.append([999] * len(startvector))
 
-        # your intialization code here
+        self.distance_table[2][2] = 2
+        self.distance_table[0][0] = 7
 
     def start(self):
         """This function is called once the simulator is fully
