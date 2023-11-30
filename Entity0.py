@@ -35,7 +35,8 @@ class Entity0(Entity):
         
         # make packets that have the link info for node0
         # this is the packet for node1
-        starterPacket = Packet(self, self.sim, 0, 1)
+        # for ralph later, the min cost is just the base vector [0 (self cost for node 0), 5, 3, 7]
+        starterPacket = Packet(self, self.sim, 0, 1, )
         self.sim.toLayer2(0, starterPacket)
         # packet for node2
         starterPacket = Packet(self, self.sim, 0, 2)
