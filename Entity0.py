@@ -36,14 +36,16 @@ class Entity0(Entity):
         # make packets that have the link info for node0
         # this is the packet for node1
         # for ralph later, the min cost is just the base vector [0 (self cost for node 0), 5, 3, 7]
-        starterPacket = Packet(self, self.sim, 0, 1, [0 , 5, 3, 7])
-        self.sim.toLayer2(0, starterPacket)
+        mincost = [0 , 5, 3, 7]
+        
+        starterPacket = Packet(self.sim, 0, 1, [0, 5, 3, 7])
+        self.sim.to_layer2(0, starterPacket)
         # packet for node2
-        starterPacket = Packet(self, self.sim, 0, 2)
-        self.sim.toLayer2(0, starterPacket)
+        starterPacket = Packet(self.sim, 0, 2, [0 , 5, 3, 7])
+        self.sim.to_layer2(0, starterPacket)
         # packet for node3
-        starterPacket = Packet(self, self.sim, 0, 3)
-        self.sim.toLayer2(0, starterPacket)
+        starterPacket = Packet(self.sim, 0, 3, [0 , 5, 3, 7])
+        self.sim.to_layer2(0, starterPacket)
 
     def update(self, pkt):
         """Handle updates when a packet is received.  Students will need to call
