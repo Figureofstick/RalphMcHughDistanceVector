@@ -36,6 +36,19 @@ class Entity1(Entity):
         send to update.  Be careful to construct the source and destination of
         the packet correctly.
         details."""
+        pkt_src = pkt.get_source()
+        
+        ## pretty gross right?
+        pkt_mincost_node0 = pkt.get_min_cost(0)
+        pkt_mincost_node1 = pkt.get_min_cost(1)
+        pkt_mincost_node2 = pkt.get_min_cost(2)
+        pkt_mincost_node3 = pkt.get_min_cost(3)
+        
+            
+         
+
+
+
 
     def link_cost_change_handler(self, which_link, new_cost):
         """This function is called when the topology of the network
