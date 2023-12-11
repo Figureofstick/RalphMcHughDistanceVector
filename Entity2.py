@@ -38,6 +38,31 @@ class Entity2(Entity):
         the packet correctly.
         details."""
 
+        pkt_src = pkt.get_source()
+        
+        pkt_min_cost = [pkt.get_min_cost(0), pkt.get_min_cost(1),pkt.get_min_cost(2), pkt.get_min_cost(3)]
+        
+        previous = self.distance_table
+        
+        length_via_adjacent = self.distance_table[pkt_src][pkt_src]
+        # go through and add the values of an adjacent node
+        for i in range(len(pkt_min_cost)):
+             # can that packet actually get to the node?
+            if(pkt_min_cost[i] != 999):   
+                self.distance_table[i][pkt_src] = length_via_adjacent + pkt_min_cost[i]
+
+        
+        
+        outgoing_packet = Packet(self.sim, 2, 0, self.getMyMinCost())
+        self.sim.to_layer2(2, outgoing_packet)
+
+        outgoing_packet = Packet(self.sim, 2, 1, self.getMyMinCost())
+        self.sim.to_layer2(2, outgoing_packet)
+
+        outgoing_packet = Packet(self.sim, 2, 3, self.getMyMinCost())
+        self.sim.to_layer2(2, outgoing_packet)
+
+
     def link_cost_change_handler(self, which_link, new_cost):
         """This function is called when the topology of the network
         has changed. `which_link` is the number of the neighbor
@@ -61,3 +86,27 @@ class Entity2(Entity):
 
                 print(f"{self.distance_table[i][j]:>5}", end='')
             print('')
+
+
+     # makes an array of how much it costs to get to each node from this entity
+    def getMyMinCost(self):
+        min_cost = [999, 999, 0, 999]
+
+        for i in range(0,4):
+            for j in range(0,4):
+                
+                if( min_cost[j] > self.distance_table[j][i]):
+                    min_cost[j] = self.distance_table[j][i]
+                
+
+        # print(min_cost)
+        return min_cost
+    
+
+
+    def diffInMinCost(self, cost1, cost2):
+        for i in range(0,4):
+            for j in range(0,4):
+                if (cost1[i][j] != cost2[i][j]):
+                    return True
+        return False

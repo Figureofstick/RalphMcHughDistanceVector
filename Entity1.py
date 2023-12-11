@@ -36,17 +36,34 @@ class Entity1(Entity):
         send to update.  Be careful to construct the source and destination of
         the packet correctly.
         details."""
+        
+        
         pkt_src = pkt.get_source()
         
-        ## pretty gross right?
-        pkt_mincost_node0 = pkt.get_min_cost(0)
-        pkt_mincost_node1 = pkt.get_min_cost(1)
-        pkt_mincost_node2 = pkt.get_min_cost(2)
-        pkt_mincost_node3 = pkt.get_min_cost(3)
+        pkt_min_cost = [pkt.get_min_cost(0), pkt.get_min_cost(1),pkt.get_min_cost(2),pkt.get_min_cost(3)]
         
-            
-         
+        previous = self.distance_table
 
+        # is this from something I am directly connected to?
+        if( self.distance_table[pkt_src][pkt_src] != 999 ):
+            length_via_adjacent = self.distance_table[pkt_src][pkt_src]
+            # go through and add the values of an adjacent node
+            for i in range(len(pkt_min_cost)):
+                 # can that packet actually get to the node?
+                if(pkt_min_cost[i] != 999):
+                    self.distance_table[i][pkt_src] = length_via_adjacent + pkt_min_cost[i]
+
+        if(self.diffInMinCost(previous, self.distance_table)):
+
+            outgoing_packet = Packet(self.sim, 1, 0, self.getMyMinCost())
+            self.sim.to_layer2(1, outgoing_packet)
+
+            outgoing_packet = Packet(self.sim, 1, 2, self.getMyMinCost())
+            self.sim.to_layer2(1, outgoing_packet)
+
+       
+
+           
 
 
 
@@ -73,3 +90,24 @@ class Entity1(Entity):
 
                 print(f"{self.distance_table[i][j]:>5}", end='')
             print('')
+
+
+    # makes an array of how much it costs to get to each node from this entity
+    def getMyMinCost(self):
+        min_cost = [999, 0, 999, 999]
+
+        for i in range(0,4):
+            for j in range(0,4):
+                if( min_cost[j] > self.distance_table[j][i]):
+                    min_cost[j] = self.distance_table[j][i]
+                
+
+        # print(min_cost)
+        return min_cost
+    
+    def diffInMinCost(self, cost1, cost2):
+        for i in range(0,4):
+            for j in range(0,4):
+                if (cost1[i][j] != cost2[i][j]):
+                    return True
+        return False
